@@ -1,0 +1,5 @@
+windows/** linguist-documentation
+linux/** linguist-documentation
+macos/** linguist-documentation
+*.cpp linguist-vendored
+*.h linguist-vendored
