@@ -1,17 +1,8 @@
 import 'dart:developer';
 
 import 'package:climate/model/climate_model.dart';
+import 'package:climate/service/climate_exception.dart';
 import 'package:dio/dio.dart';
-
-/// Custom Exception Class
-class ClimateException implements Exception {
-  final String message;
-
-  ClimateException(this.message);
-
-  @override
-  String toString() => message;
-}
 
 class ClimateServices {
   final Dio dio;

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="cloudColor" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#CFD8DC"/>
+      <stop offset="100%" stop-color="#90A4AE"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="80" cy="90" rx="52" ry="36" fill="url(#cloudColor)" />
+  <ellipse cx="120" cy="90" rx="52" ry="36" fill="url(#cloudColor)" />
+  <ellipse cx="100" cy="72" rx="52" ry="34" fill="url(#cloudColor)" />
+  <g>
+    <circle cx="82" cy="100" r="8" fill="#546E7A" />
+    <circle cx="118" cy="100" r="8" fill="#546E7A" />
+    <path d="M82 116 Q100 132 118 116" fill="none" stroke="#546E7A" stroke-width="10" stroke-linecap="round" />
+  </g>
+  <circle cx="98" cy="132" r="20" fill="#90A4AE" opacity="0.8" />
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="cloudGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ECEFF1"/>
+      <stop offset="100%" stop-color="#B0BEC5"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="90" rx="72" ry="44" fill="url(#cloudGradient)" />
+  <ellipse cx="72" cy="80" rx="40" ry="28" fill="url(#cloudGradient)" />
+  <ellipse cx="128" cy="78" rx="36" ry="24" fill="url(#cloudGradient)" />
+  <g>
+    <circle cx="80" cy="88" r="8" fill="#455A64" />
+    <circle cx="120" cy="88" r="8" fill="#455A64" />
+    <path d="M74 112 Q100 130 126 112" fill="none" stroke="#455A64" stroke-width="10" stroke-linecap="round" />
+  </g>
+  <line x1="80" y1="134" x2="80" y2="172" stroke="#4FC3F7" stroke-width="12" stroke-linecap="round" />
+  <line x1="92" y1="142" x2="92" y2="178" stroke="#4FC3F7" stroke-width="12" stroke-linecap="round" />
+  <line x1="108" y1="142" x2="108" y2="178" stroke="#4FC3F7" stroke-width="12" stroke-linecap="round" />
+  <line x1="120" y1="134" x2="120" y2="172" stroke="#4FC3F7" stroke-width="12" stroke-linecap="round" />
+</svg>

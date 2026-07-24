@@ -83,55 +83,61 @@ class _HomeViewState extends State<HomeView> {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 8),
-                    Text(
-                      'Find weather for any city',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.97),
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        height: 1.15,
-                        letterSpacing: 0.2,
-                      ),
+            child: Stack(
+              children: [
+                _WeatherAtmosphere(condition: weatherCondition),
+                SafeArea(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Type a city name below and get today’s weather instantly.',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85),
-                        fontSize: 15.5,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    _SearchBar(
-                      controller: _searchController,
-                      onSubmit: _searchCity,
-                    ),
-                    const SizedBox(height: 36),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 350),
-                      transitionBuilder: (child, animation) => FadeTransition(
-                        opacity: animation,
-                        child: SizeTransition(
-                          sizeFactor: animation,
-                          child: child,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 8),
+                        Text(
+                          'Find weather for any city',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.97),
+                            fontSize: 30,
+                            fontWeight: FontWeight.w800,
+                            height: 1.15,
+                            letterSpacing: 0.2,
+                          ),
                         ),
-                      ),
-                      child: _buildBody(state),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Type a city name below and get today’s weather instantly.',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.85),
+                            fontSize: 15.5,
+                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _SearchBar(
+                          controller: _searchController,
+                          onSubmit: _searchCity,
+                        ),
+                        const SizedBox(height: 36),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 350),
+                          transitionBuilder: (child, animation) =>
+                              FadeTransition(
+                                opacity: animation,
+                                child: SizeTransition(
+                                  sizeFactor: animation,
+                                  child: child,
+                                ),
+                              ),
+                          child: _buildBody(state),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           );
         },
@@ -240,13 +246,127 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
+class _WeatherAtmosphere extends StatelessWidget {
+  const _WeatherAtmosphere({this.condition});
+
+  final String? condition;
+
+  bool get _isRain {
+    final value = condition?.toLowerCase() ?? '';
+    return value.contains('rain') || value.contains('drizzle');
+  }
+
+  bool get _isSnow {
+    final value = condition?.toLowerCase() ?? '';
+    return value.contains('snow') ||
+        value.contains('sleet') ||
+        value.contains('ice');
+  }
+
+  bool get _isCloud {
+    final value = condition?.toLowerCase() ?? '';
+    return value.contains('cloud') ||
+        value.contains('fog') ||
+        value.contains('mist');
+  }
+
+  bool get _isThunder {
+    final value = condition?.toLowerCase() ?? '';
+    return value.contains('thunder');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 700),
+        opacity: condition == null ? 0.0 : 1.0,
+        curve: Curves.easeInOut,
+        child: Stack(
+          children: [
+            Positioned(
+              right: -40,
+              top: 40,
+              child: Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Colors.white.withOpacity(0.18),
+                      Colors.white.withOpacity(0.0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            if (_isCloud || _isRain || _isSnow)
+              Positioned(
+                left: 20,
+                top: 80,
+                child: Icon(
+                  Icons.cloud,
+                  size: 96,
+                  color: Colors.white.withOpacity(0.12),
+                ),
+              ),
+            if (_isRain)
+              Positioned(
+                left: 40,
+                top: 180,
+                child: SizedBox(
+                  width: 100,
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      4,
+                      (index) => Container(
+                        width: 4,
+                        height: 14,
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.65),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (_isSnow)
+              Positioned(
+                right: 20,
+                bottom: 40,
+                child: Icon(
+                  Icons.ac_unit,
+                  size: 46,
+                  color: Colors.white.withOpacity(0.18),
+                ),
+              ),
+            if (_isThunder)
+              Positioned(
+                right: 30,
+                top: 180,
+                child: Icon(
+                  Icons.flash_on,
+                  size: 42,
+                  color: Colors.yellow.withOpacity(0.75),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Shifts a color's lightness by [amount] (negative = darker, positive =
 /// lighter) so a single theme color yields a pleasing gradient.
 Color _shift(Color color, double amount) {
   final hsl = HSLColor.fromColor(color);
-  return hsl
-      .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
-      .toColor();
+  return hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0)).toColor();
 }
 
 Color getThemeColor(String? condition, Color defaultColor) {

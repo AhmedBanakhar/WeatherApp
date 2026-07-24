@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="stormGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#D1C4E9"/>
+      <stop offset="100%" stop-color="#7E57C2"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="88" rx="70" ry="40" fill="url(#stormGradient)" />
+  <ellipse cx="68" cy="80" rx="42" ry="28" fill="url(#stormGradient)" />
+  <ellipse cx="132" cy="80" rx="38" ry="26" fill="url(#stormGradient)" />
+  <path d="M82 104 L102 130 L90 130 L110 156" fill="none" stroke="#FFD54F" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="74" cy="88" r="8" fill="#3E2723" />
+  <circle cx="126" cy="88" r="8" fill="#3E2723" />
+  <path d="M74 118 Q100 136 126 118" fill="none" stroke="#3E2723" stroke-width="10" stroke-linecap="round" />
+</svg>
