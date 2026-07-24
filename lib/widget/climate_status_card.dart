@@ -66,6 +66,7 @@ class StatusCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         backgroundColor: Theme.of(context).primaryColor,
+                        foregroundColor: Colors.white,
                       ),
                       child: Text(actionLabel),
                     ),
