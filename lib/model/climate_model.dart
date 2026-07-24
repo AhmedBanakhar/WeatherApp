@@ -19,15 +19,15 @@ class ClimateModel {
   });
 
   factory ClimateModel.fromJson(json) {
+    final day = json['forecast']['forecastday'][0]['day'];
     return ClimateModel(
       city: json['location']['name'],
       date: DateTime.parse(json['current']['last_updated']),
-      iconUrl: json['forecast']['forecastday'][0]['day']['condition']['icon'],
-      temperature: json['forecast']['forecastday'][0]['day']['avgtemp_c'],
-      maxTemperature: json['forecast']['forecastday'][0]['day']['maxtemp_c'],
-      minTemperature: json['forecast']['forecastday'][0]['day']['mintemp_c'],
-      weatherCondition:
-          json['forecast']['forecastday'][0]['day']['condition']['text'],
+      iconUrl: day['condition']['icon'],
+      temperature: (day['avgtemp_c'] as num).toDouble(),
+      maxTemperature: (day['maxtemp_c'] as num).toDouble(),
+      minTemperature: (day['mintemp_c'] as num).toDouble(),
+      weatherCondition: day['condition']['text'],
     );
   }
 }

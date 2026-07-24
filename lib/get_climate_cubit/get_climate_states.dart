@@ -12,4 +12,8 @@ class ClimateLoadedState extends ClimateState {
   ClimateLoadedState(this.climateModel);
 }
 
-class ClimateFaillureState extends ClimateState {}
+class ClimateFaillureState extends ClimateState {
+  final String errMessage;
+
+  ClimateFaillureState(this.errMessage);
+}

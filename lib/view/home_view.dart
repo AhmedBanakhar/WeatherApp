@@ -167,7 +167,7 @@ class _HomeViewState extends State<HomeView> {
                         StatusCard(
                           context: context,
                           title: 'Something went wrong',
-                          subtitle: 'Please check the city name and try again.',
+                          subtitle: state.errMessage,
                           icon: Icons.error_outline,
                           actionLabel: 'Try again',
                           action: _searchCity,
