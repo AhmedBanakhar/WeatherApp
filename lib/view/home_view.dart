@@ -148,11 +148,11 @@ class _HomeViewState extends State<HomeView> {
         icon: Icons.cloud_download_outlined,
       );
     }
-    if (state is ClimateFaillureState) {
+    if (state is ClimateFailureState) {
       return StatusCard(
         key: const ValueKey('failure'),
         title: 'Something went wrong',
-        subtitle: 'Please check the city name and try again.',
+        subtitle: state.message,
         icon: Icons.error_outline,
         actionLabel: 'Try again',
         action: _searchCity,
@@ -253,7 +253,7 @@ Color getThemeColor(String? condition, Color defaultColor) {
   if (condition == null || condition.isEmpty) {
     return defaultColor;
   }
-  switch (condition) {
+  switch (condition.trim()) {
     // ☀️ Sunny / Clear
     case 'Sunny':
     case 'Clear':

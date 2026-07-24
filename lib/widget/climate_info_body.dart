@@ -166,7 +166,8 @@ class ClimateInfoBody extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(String label, String value, Color color, IconData icon) {
+  Widget _buildStatChip(
+      String label, String value, Color color, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       decoration: BoxDecoration(

@@ -13,13 +13,19 @@ class GetClimateCubit extends Cubit<ClimateState> {
 
   ClimateModel? climateModel;
 
-  getClimate({required String city}) async {
+  Future<void> getClimate({required String city}) async {
     try {
       emit(ClimateLoadingState());
       climateModel = await _climateServices.getClimate(city: city);
       emit(ClimateLoadedState(climateModel!));
     } catch (e) {
-      emit(ClimateFaillureState());
+      emit(
+        ClimateFailureState(
+          e is Exception
+              ? e.toString().replaceFirst('Exception: ', '')
+              : 'Please check the city name and try again.',
+        ),
+      );
     }
   }
 }
