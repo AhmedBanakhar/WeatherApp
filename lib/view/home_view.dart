@@ -2,6 +2,7 @@ import 'package:climate/get_climate_cubit/get_climate_cubit.dart';
 import 'package:climate/get_climate_cubit/get_climate_states.dart';
 import 'package:climate/widget/climate_info_body.dart';
 import 'package:climate/widget/climate_status_card.dart';
+import 'package:climate/widget/glass_container.dart';
 import 'package:climate/widget/no_climate_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,152 +40,213 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text(
-          'Weather',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.white,
-          ),
+        centerTitle: false,
+        title: const Row(
+          children: [
+            Icon(Icons.wb_sunny_rounded, color: Colors.white, size: 26),
+            SizedBox(width: 10),
+            Text(
+              'Weather',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
         ),
       ),
-      body: SafeArea(
-        top: false,
-        child: BlocBuilder<GetClimateCubit, ClimateState>(
-          builder: (context, state) {
-            final weatherCondition = BlocProvider.of<GetClimateCubit>(
-              context,
-            ).climateModel?.weatherCondition;
+      body: BlocBuilder<GetClimateCubit, ClimateState>(
+        builder: (context, state) {
+          final weatherCondition = BlocProvider.of<GetClimateCubit>(
+            context,
+          ).climateModel?.weatherCondition;
 
-            final themeColor = getThemeColor(weatherCondition, primaryColor);
+          final themeColor = getThemeColor(weatherCondition, primaryColor);
 
-            return Container(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeInOut,
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  _shift(themeColor, -0.22),
+                  themeColor,
+                  _shift(themeColor, 0.28),
+                ],
+                stops: const [0.0, 0.45, 1.0],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    themeColor.withOpacity(0.76), // بديل shade300
-                    themeColor.withOpacity(0.85), // بديل shade200
-                    themeColor.withOpacity(0.95), // بديل shade100
-                    Colors.white,
+            ),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 8),
+                    Text(
+                      'Find weather for any city',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.97),
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        height: 1.15,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Type a city name below and get today’s weather instantly.',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 15.5,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    _SearchBar(
+                      controller: _searchController,
+                      onSubmit: _searchCity,
+                    ),
+                    const SizedBox(height: 36),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      transitionBuilder: (child, animation) => FadeTransition(
+                        opacity: animation,
+                        child: SizeTransition(
+                          sizeFactor: animation,
+                          child: child,
+                        ),
+                      ),
+                      child: _buildBody(state),
+                    ),
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
                 ),
               ),
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 12),
-                      Text(
-                        'Find weather for any city',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.95),
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Type a city name below and get today’s weather instantly.',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.88),
-                          fontSize: 16,
-                          height: 1.4,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _searchController,
-                                textInputAction: TextInputAction.search,
-                                onSubmitted: (_) => _searchCity(),
-                                style: const TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 18,
-                                    vertical: 18,
-                                  ),
-                                  hintText: 'Search city',
-                                  border: InputBorder.none,
-                                  prefixIcon: Icon(
-                                    Icons.search,
-                                    color: themeColor.withValues(alpha: 0.72),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: _searchCity,
-                              child: Container(
-                                height: 56,
-                                width: 56,
-                                margin: const EdgeInsets.only(right: 4),
-                                decoration: BoxDecoration(
-                                  color: themeColor.withValues(alpha: 0.72),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      if (state is ClimateLoadingState) ...[
-                        StatusCard(
-                          title: 'Loading weather',
-                          subtitle: 'Fetching the latest data for your city.',
-                          icon: Icons.cloud_download_outlined,
-                        ),
-                      ] else if (state is ClimateFailureState) ...[
-                        StatusCard(
-                          title: 'Something went wrong',
-                          subtitle: state.message,
-                          icon: Icons.error_outline,
-                          actionLabel: 'Try again',
-                          action: _searchCity,
-                        ),
-                      ] else if (state is ClimateLoadedState) ...[
-                        ClimateInfoBody(climateModel: state.climateModel),
-                      ] else ...[
-                        NoClimateBody(),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
+
+  Widget _buildBody(ClimateState state) {
+    if (state is ClimateLoadingState) {
+      return const StatusCard(
+        key: ValueKey('loading'),
+        title: 'Loading weather',
+        subtitle: 'Fetching the latest data for your city.',
+        icon: Icons.cloud_download_outlined,
+      );
+    }
+    if (state is ClimateFailureState) {
+      return StatusCard(
+        key: const ValueKey('failure'),
+        title: 'Something went wrong',
+        subtitle: state.message,
+        icon: Icons.error_outline,
+        actionLabel: 'Try again',
+        action: _searchCity,
+      );
+    }
+    if (state is ClimateLoadedState) {
+      return ClimateInfoBody(
+        key: const ValueKey('loaded'),
+        climateModel: state.climateModel,
+      );
+    }
+    return const NoClimateBody(key: ValueKey('empty'));
+  }
+}
+
+/// A frosted-glass search field with a rounded send button.
+class _SearchBar extends StatelessWidget {
+  const _SearchBar({required this.controller, required this.onSubmit});
+
+  final TextEditingController controller;
+  final VoidCallback onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassContainer(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      borderRadius: 22,
+      opacity: 0.22,
+      child: Row(
+        children: [
+          const SizedBox(width: 8),
+          Icon(
+            Icons.search_rounded,
+            color: Colors.white.withValues(alpha: 0.9),
+          ),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => onSubmit(),
+              cursorColor: Colors.white,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 16,
+                ),
+                hintText: 'Search city',
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.75),
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onSubmit,
+            child: Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.15),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.arrow_forward_rounded,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shifts a color's lightness by [amount] (negative = darker, positive =
+/// lighter) so a single theme color yields a pleasing gradient.
+Color _shift(Color color, double amount) {
+  final hsl = HSLColor.fromColor(color);
+  return hsl
+      .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
+      .toColor();
 }
 
 Color getThemeColor(String? condition, Color defaultColor) {
