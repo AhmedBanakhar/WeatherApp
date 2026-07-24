@@ -18,7 +18,7 @@ class ClimateInfoBody extends StatelessWidget {
     return Card(
       elevation: 14,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      color: Colors.white.withOpacity(0.96),
+      color: Colors.white.withValues(alpha: 0.96),
       margin: const EdgeInsets.only(bottom: 24),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -71,11 +71,7 @@ class ClimateInfoBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Image.network(
-                  'https:${climateModel.iconUrl}',
-                  width: 96,
-                  height: 96,
-                ),
+                _WeatherIcon(iconUrl: climateModel.iconUrl),
               ],
             ),
             const SizedBox(height: 24),
@@ -115,7 +111,7 @@ class ClimateInfoBody extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -123,7 +119,7 @@ class ClimateInfoBody extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: color.withOpacity(0.9),
+              color: color.withValues(alpha: 0.9),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -135,5 +131,50 @@ class ClimateInfoBody extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _WeatherIcon extends StatelessWidget {
+  const _WeatherIcon({required this.iconUrl});
+
+  final String iconUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    const double size = 96;
+
+    if (iconUrl.isEmpty) {
+      return const _IconFallback(size: size);
+    }
+
+    // WeatherAPI returns a protocol-relative URL (e.g. "//cdn.weatherapi.com/...").
+    final String url = iconUrl.startsWith('http') ? iconUrl : 'https:$iconUrl';
+
+    return Image.network(
+      url,
+      width: size,
+      height: size,
+      loadingBuilder: (context, child, progress) {
+        if (progress == null) return child;
+        return const SizedBox(
+          width: size,
+          height: size,
+          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) =>
+          const _IconFallback(size: size),
+    );
+  }
+}
+
+class _IconFallback extends StatelessWidget {
+  const _IconFallback({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(Icons.cloud_off, size: size * 0.6, color: Colors.blueGrey.shade300);
   }
 }
