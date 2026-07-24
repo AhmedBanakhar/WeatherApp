@@ -8,17 +8,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetClimateCubit extends Cubit<ClimateState> {
-  GetClimateCubit() : super(NoClimateState());
+  GetClimateCubit({ClimateServices? climateServices})
+      : _climateServices = climateServices ?? ClimateServices(Dio()),
+        super(NoClimateState());
+
+  final ClimateServices _climateServices;
 
   ClimateModel? climateModel;
 
-  getClimate({required String city}) async {
+  Future<void> getClimate({required String city}) async {
     try {
       emit(ClimateLoadingState());
-      climateModel = await ClimateServices(Dio()).getClimate(city: city);
+      climateModel = await _climateServices.getClimate(city: city);
       emit(ClimateLoadedState(climateModel!));
     } on ClimateException catch (e) {
-      emit(ClimateFaillureState(e.message));
+      emit(ClimateFailureState(e.message));
     } catch (e, stackTrace) {
       log(
         'Unexpected error while loading climate for "$city"',
@@ -26,7 +30,7 @@ class GetClimateCubit extends Cubit<ClimateState> {
         error: e,
         stackTrace: stackTrace,
       );
-      emit(ClimateFaillureState('Something went wrong. Please try again.'));
+      emit(ClimateFailureState('Something went wrong. Please try again.'));
     }
   }
 }

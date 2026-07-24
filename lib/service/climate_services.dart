@@ -7,14 +7,27 @@ import 'package:dio/dio.dart';
 class ClimateServices {
   final Dio dio;
   final String basesUrl = 'https://api.weatherapi.com/v1';
-  final String apiKey = 'f5dd6593e7094c349a9155250261205';
+
+  /// The WeatherAPI key is read from the environment so it is never committed
+  /// to source control. Pass it at build/run time, e.g.:
+  ///   flutter run --dart-define=WEATHER_API_KEY=your_key_here
+  static const String apiKey = String.fromEnvironment('WEATHER_API_KEY');
+
   ClimateServices(this.dio);
+
   Future<ClimateModel> getClimate({required String city}) async {
+    if (apiKey.isEmpty) {
+      throw ClimateException(
+        'Missing WeatherAPI key. Run with '
+        '--dart-define=WEATHER_API_KEY=your_key_here',
+      );
+    }
     try {
       final response = await dio.get(
-        '$basesUrl/forecast.json?key=$apiKey&q=$city&days=1',
+        '$basesUrl/forecast.json',
+        queryParameters: {'key': apiKey, 'q': city, 'days': 1},
       );
-      return ClimateModel.fromJson(response.data);
+      return ClimateModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e, stackTrace) {
       log(
         'Request for "$city" failed',

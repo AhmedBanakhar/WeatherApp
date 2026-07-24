@@ -1,6 +1,6 @@
 import 'package:climate/model/climate_model.dart';
 
-class ClimateState {}
+abstract class ClimateState {}
 
 class NoClimateState extends ClimateState {}
 
@@ -12,8 +12,8 @@ class ClimateLoadedState extends ClimateState {
   ClimateLoadedState(this.climateModel);
 }
 
-class ClimateFaillureState extends ClimateState {
-  final String errMessage;
+class ClimateFailureState extends ClimateState {
+  final String message;
 
-  ClimateFaillureState(this.errMessage);
+  ClimateFailureState(this.message);
 }

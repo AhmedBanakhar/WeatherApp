@@ -1,9 +1,9 @@
+import 'package:climate/widget/glass_container.dart';
 import 'package:flutter/material.dart';
 
 class StatusCard extends StatelessWidget {
   const StatusCard({
     super.key,
-    required this.context,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -11,7 +11,6 @@ class StatusCard extends StatelessWidget {
     this.action,
   });
 
-  final BuildContext context;
   final String title;
   final String subtitle;
   final IconData icon;
@@ -20,63 +19,70 @@ class StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Padding(
-        padding: const EdgeInsets.all(22),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey.shade50,
-                borderRadius: BorderRadius.circular(16),
+    return GlassContainer(
+      padding: const EdgeInsets.all(22),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.25),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.4),
               ),
-              child: Icon(icon, size: 28, color: Colors.blueGrey.shade700),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade900,
-                    ),
+            child: Icon(icon, size: 28, color: Colors.white),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey.shade700,
-                      height: 1.4,
-                    ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white.withValues(alpha: 0.85),
+                    height: 1.4,
                   ),
-                  if (action != null) ...[
-                    const SizedBox(height: 18),
-                    ElevatedButton(
-                      onPressed: action,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        backgroundColor: Theme.of(context).primaryColor,
+                ),
+                if (action != null) ...[
+                  const SizedBox(height: 18),
+                  ElevatedButton(
+                    onPressed: action,
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 22,
+                        vertical: 12,
                       ),
-                      child: Text(actionLabel),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      backgroundColor: Colors.white,
+                      foregroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                  ],
+                    child: Text(
+                      actionLabel,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
