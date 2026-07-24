@@ -5,14 +5,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetClimateCubit extends Cubit<ClimateState> {
-  GetClimateCubit() : super(NoClimateState());
+  GetClimateCubit({ClimateServices? climateServices})
+    : _climateServices = climateServices ?? ClimateServices(Dio()),
+      super(NoClimateState());
+
+  final ClimateServices _climateServices;
 
   ClimateModel? climateModel;
 
   getClimate({required String city}) async {
     try {
       emit(ClimateLoadingState());
-      climateModel = await ClimateServices(Dio()).getClimate(city: city);
+      climateModel = await _climateServices.getClimate(city: city);
       emit(ClimateLoadedState(climateModel!));
     } catch (e) {
       emit(ClimateFaillureState());
