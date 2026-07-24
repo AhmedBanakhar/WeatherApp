@@ -65,9 +65,9 @@ class _HomeViewState extends State<HomeView> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    themeColor.withValues(alpha: 0.76), // بديل shade300
-                    themeColor.withValues(alpha: 0.85), // بديل shade200
-                    themeColor.withValues(alpha: 0.95), // بديل shade100
+                    themeColor.withOpacity(0.76), // بديل shade300
+                    themeColor.withOpacity(0.85), // بديل shade200
+                    themeColor.withOpacity(0.95), // بديل shade100
                     Colors.white,
                   ],
                   begin: Alignment.topCenter,
@@ -158,16 +158,14 @@ class _HomeViewState extends State<HomeView> {
                       const SizedBox(height: 40),
                       if (state is ClimateLoadingState) ...[
                         StatusCard(
-                          context: context,
                           title: 'Loading weather',
                           subtitle: 'Fetching the latest data for your city.',
                           icon: Icons.cloud_download_outlined,
                         ),
-                      ] else if (state is ClimateFaillureState) ...[
+                      ] else if (state is ClimateFailureState) ...[
                         StatusCard(
-                          context: context,
                           title: 'Something went wrong',
-                          subtitle: 'Please check the city name and try again.',
+                          subtitle: state.message,
                           icon: Icons.error_outline,
                           actionLabel: 'Try again',
                           action: _searchCity,
@@ -193,7 +191,7 @@ Color getThemeColor(String? condition, Color defaultColor) {
   if (condition == null || condition.isEmpty) {
     return defaultColor;
   }
-  switch (condition) {
+  switch (condition.trim()) {
     // ☀️ Sunny / Clear
     case 'Sunny':
     case 'Clear':

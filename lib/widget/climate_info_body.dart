@@ -73,11 +73,7 @@ class ClimateInfoBody extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Image.network(
-                  'https:${climateModel.iconUrl}',
-                  width: 96,
-                  height: 96,
-                ),
+                _WeatherIcon(iconUrl: climateModel.iconUrl),
               ],
             ),
             const SizedBox(height: 24),

@@ -1,5 +1,4 @@
 class ClimateModel {
- 
   final String city;
   final DateTime date;
   final String iconUrl;
@@ -18,17 +17,16 @@ class ClimateModel {
     required this.weatherCondition,
   });
 
-  factory ClimateModel.fromJson(json) {
+  factory ClimateModel.fromJson(Map<String, dynamic> json) {
+    final day = json['forecast']['forecastday'][0]['day'] as Map<String, dynamic>;
     return ClimateModel(
-      city: json['location']['name'],
-      date: DateTime.parse(json['current']['last_updated']),
-      iconUrl: json['forecast']['forecastday'][0]['day']['condition']['icon'],
-      temperature: json['forecast']['forecastday'][0]['day']['avgtemp_c'],
-      maxTemperature: json['forecast']['forecastday'][0]['day']['maxtemp_c'],
-      minTemperature: json['forecast']['forecastday'][0]['day']['mintemp_c'],
-      weatherCondition:
-          json['forecast']['forecastday'][0]['day']['condition']['text'],
+      city: json['location']['name'] as String,
+      date: DateTime.parse(json['current']['last_updated'] as String),
+      iconUrl: day['condition']['icon'] as String,
+      temperature: (day['avgtemp_c'] as num).toDouble(),
+      maxTemperature: (day['maxtemp_c'] as num).toDouble(),
+      minTemperature: (day['mintemp_c'] as num).toDouble(),
+      weatherCondition: day['condition']['text'] as String,
     );
   }
 }
-
