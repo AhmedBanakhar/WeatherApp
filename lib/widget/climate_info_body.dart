@@ -10,7 +10,7 @@ class ClimateInfoBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // حساب الساعة بنظام 12 ساعة وتحديد الفترة (صباحاً أو مساءً)
+    // حساب الساعة بنظام 12 ساعة وتحديد الفترة (AM / PM)
     final int hour12 = climateModel.date.hour % 12 == 0
         ? 12
         : climateModel.date.hour % 12;
@@ -73,6 +73,11 @@ class ClimateInfoBody extends StatelessWidget {
                 'https:${climateModel.iconUrl}',
                 width: 96,
                 height: 96,
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.wb_cloudy_rounded,
+                  size: 64,
+                  color: Colors.blueGrey.shade300,
+                ),
               ),
             ],
           ),
@@ -94,12 +99,14 @@ class ClimateInfoBody extends StatelessWidget {
                 'Max',
                 climateModel.maxTemperature.celsiusLabel,
                 Colors.red.shade600,
+                Icons.arrow_upward_rounded,
               ),
               const SizedBox(width: 12),
               _buildStatChip(
                 'Min',
                 climateModel.minTemperature.celsiusLabel,
                 Colors.blue.shade600,
+                Icons.arrow_downward_rounded,
               ),
             ],
           ),
@@ -108,22 +115,41 @@ class ClimateInfoBody extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(String label, String value, Color color) {
+  Widget _buildStatChip(
+    String label,
+    String value,
+    Color color,
+    IconData icon,
+  ) {
     return RoundedContainer(
       color: color.withOpacity(0.12),
-      child: Column(
+      borderRadius: 18,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: color.withOpacity(0.9),
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          Icon(icon, size: 20, color: color),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: color.withOpacity(0.9),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         ],
       ),
