@@ -1,4 +1,7 @@
 import 'package:climate/model/climate_model.dart';
+import 'package:climate/utils/temperature_format.dart';
+import 'package:climate/widget/app_card.dart';
+import 'package:climate/widget/rounded_container.dart';
 import 'package:flutter/material.dart';
 
 class ClimateInfoBody extends StatelessWidget {
@@ -8,116 +11,106 @@ class ClimateInfoBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // حساب الساعة بنظام 12 ساعة وتحديد الفترة (صباحاً أو مساءً)
-    final int hour12 = climateModel.date.hour % 12 == 0 ? 12 : climateModel.date.hour % 12;
+    final int hour12 = climateModel.date.hour % 12 == 0
+        ? 12
+        : climateModel.date.hour % 12;
     final String period = climateModel.date.hour >= 12 ? 'PM' : 'AM';
-    
+
     // دمج الساعة والدقائق والفترة في متغير واحد
     final time =
         '${hour12.toString().padLeft(2, '0')}:${climateModel.date.minute.toString().padLeft(2, '0')} $period';
 
-    return Card(
+    return AppCard(
       elevation: 14,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      borderRadius: 28,
       color: Colors.white.withOpacity(0.96),
-      margin: const EdgeInsets.only(bottom: 24),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        climateModel.city,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+      bottomMargin: 24,
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      climateModel.city,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Updated at $time',
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Updated at $time',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    RoundedContainer(
+                      color: Colors.blueGrey.shade50,
+                      borderRadius: 18,
+                      child: Text(
+                        climateModel.weatherCondition,
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.grey.shade600,
+                          color: Colors.grey.shade800,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey.shade50,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Text(
-                          climateModel.weatherCondition,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey.shade800,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Image.network(
-                  'https:${climateModel.iconUrl}',
-                  width: 96,
-                  height: 96,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            Text(
-              '${climateModel.temperature.round()}°C',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 64,
-                fontWeight: FontWeight.w900,
-                color: Colors.blueGrey.shade900,
               ),
+              const SizedBox(width: 16),
+              Image.network(
+                'https:${climateModel.iconUrl}',
+                width: 96,
+                height: 96,
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            climateModel.temperature.celsiusLabel,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 64,
+              fontWeight: FontWeight.w900,
+              color: Colors.blueGrey.shade900,
             ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildStatChip(
-                  'Max',
-                  '${climateModel.maxTemperature.round()}°C',
-                  Colors.red.shade600,
-                ),
-                const SizedBox(width: 12),
-                _buildStatChip(
-                  'Min',
-                  '${climateModel.minTemperature.round()}°C',
-                  Colors.blue.shade600,
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildStatChip(
+                'Max',
+                climateModel.maxTemperature.celsiusLabel,
+                Colors.red.shade600,
+              ),
+              const SizedBox(width: 12),
+              _buildStatChip(
+                'Min',
+                climateModel.minTemperature.celsiusLabel,
+                Colors.blue.shade600,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildStatChip(String label, String value, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return RoundedContainer(
+      color: color.withOpacity(0.12),
       child: Column(
         children: [
           Text(
