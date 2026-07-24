@@ -1,20 +1,29 @@
+// App-level smoke tests for the weather app.
+//
+// These verify that the app boots into its empty state and exposes the
+// city search field.
+
+import 'package:climate/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:climate/main.dart';
-import 'package:climate/widget/no_climate_body.dart';
-
 void main() {
-  testWidgets('shows the empty state and search field on launch', (
-    WidgetTester tester,
+  testWidgets('app boots into the empty state with a search field', (
+    tester,
   ) async {
     await tester.pumpWidget(const MyApp());
 
-    // The initial (NoClimate) state should be visible.
-    expect(find.byType(NoClimateBody), findsOneWidget);
+    // App title in the AppBar.
+    expect(find.text('Weather'), findsOneWidget);
 
-    // The search field prompt should be present.
-    expect(find.text('Search city'), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget);
+    // Empty-state prompt from NoClimateBody.
+    expect(find.text('Ready when you are'), findsOneWidget);
+
+    // Search field is present and accepts input.
+    final searchField = find.byType(TextField);
+    expect(searchField, findsOneWidget);
+
+    await tester.enterText(searchField, 'London');
+    expect(find.text('London'), findsOneWidget);
   });
 }
