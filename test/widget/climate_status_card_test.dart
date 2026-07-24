@@ -6,15 +6,12 @@ void main() {
   group('StatusCard', () {
     testWidgets('renders title, subtitle and icon', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: Builder(
-              builder: (context) => StatusCard(
-                context: context,
-                title: 'Loading weather',
-                subtitle: 'Fetching the latest data for your city.',
-                icon: Icons.cloud_download_outlined,
-              ),
+            body: StatusCard(
+              title: 'Loading weather',
+              subtitle: 'Fetching the latest data for your city.',
+              icon: Icons.cloud_download_outlined,
             ),
           ),
         ),
@@ -38,15 +35,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Builder(
-              builder: (context) => StatusCard(
-                context: context,
-                title: 'Something went wrong',
-                subtitle: 'Please check the city name and try again.',
-                icon: Icons.error_outline,
-                actionLabel: 'Try again',
-                action: () => tapped++,
-              ),
+            body: StatusCard(
+              title: 'Something went wrong',
+              subtitle: 'Please check the city name and try again.',
+              icon: Icons.error_outline,
+              actionLabel: 'Try again',
+              action: () => tapped++,
             ),
           ),
         ),
