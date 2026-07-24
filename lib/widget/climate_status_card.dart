@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class StatusCard extends StatelessWidget {
   const StatusCard({
     super.key,
-    required this.context,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -11,7 +10,6 @@ class StatusCard extends StatelessWidget {
     this.action,
   });
 
-  final BuildContext context;
   final String title;
   final String subtitle;
   final IconData icon;
