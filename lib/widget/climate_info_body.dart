@@ -8,9 +8,11 @@ class ClimateInfoBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // حساب الساعة بنظام 12 ساعة وتحديد الفترة (صباحاً أو مساءً)
-    final int hour12 = climateModel.date.hour % 12 == 0 ? 12 : climateModel.date.hour % 12;
+    final int hour12 = climateModel.date.hour % 12 == 0
+        ? 12
+        : climateModel.date.hour % 12;
     final String period = climateModel.date.hour >= 12 ? 'PM' : 'AM';
-    
+
     // دمج الساعة والدقائق والفترة في متغير واحد
     final time =
         '${hour12.toString().padLeft(2, '0')}:${climateModel.date.minute.toString().padLeft(2, '0')} $period';
@@ -18,7 +20,7 @@ class ClimateInfoBody extends StatelessWidget {
     return Card(
       elevation: 14,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      color: Colors.white.withOpacity(0.96),
+      color: Colors.white.withValues(alpha: 0.96),
       margin: const EdgeInsets.only(bottom: 24),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -115,7 +117,7 @@ class ClimateInfoBody extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -123,7 +125,7 @@ class ClimateInfoBody extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: color.withOpacity(0.9),
+              color: color.withValues(alpha: 0.9),
               fontWeight: FontWeight.w600,
             ),
           ),

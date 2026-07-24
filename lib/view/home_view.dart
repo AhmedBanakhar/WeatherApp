@@ -65,9 +65,9 @@ class _HomeViewState extends State<HomeView> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    themeColor.withOpacity(0.76), // بديل shade300
-                    themeColor.withOpacity(0.85), // بديل shade200
-                    themeColor.withOpacity(0.95), // بديل shade100
+                    themeColor.withValues(alpha: 0.76), // بديل shade300
+                    themeColor.withValues(alpha: 0.85), // بديل shade200
+                    themeColor.withValues(alpha: 0.95), // بديل shade100
                     Colors.white,
                   ],
                   begin: Alignment.topCenter,
@@ -87,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         'Find weather for any city',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.95),
+                          color: Colors.white.withValues(alpha: 0.95),
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
@@ -96,7 +96,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         'Type a city name below and get today’s weather instantly.',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.88),
+                          color: Colors.white.withValues(alpha: 0.88),
                           fontSize: 16,
                           height: 1.4,
                         ),
@@ -108,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
                           borderRadius: BorderRadius.circular(18),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
+                              color: Colors.black.withValues(alpha: 0.12),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
@@ -131,7 +131,7 @@ class _HomeViewState extends State<HomeView> {
                                   border: InputBorder.none,
                                   prefixIcon: Icon(
                                     Icons.search,
-                                    color: themeColor.withOpacity(0.72),
+                                    color: themeColor.withValues(alpha: 0.72),
                                   ),
                                 ),
                               ),
@@ -143,7 +143,7 @@ class _HomeViewState extends State<HomeView> {
                                 width: 56,
                                 margin: const EdgeInsets.only(right: 4),
                                 decoration: BoxDecoration(
-                                  color: themeColor.withOpacity(0.72),
+                                  color: themeColor.withValues(alpha: 0.72),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: const Icon(
