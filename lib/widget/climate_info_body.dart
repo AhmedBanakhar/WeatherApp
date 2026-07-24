@@ -135,3 +135,49 @@ class ClimateInfoBody extends StatelessWidget {
     );
   }
 }
+
+class _WeatherIcon extends StatelessWidget {
+  const _WeatherIcon({super.key, required this.iconUrl});
+
+  final String iconUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(22),
+      child: Image.network(
+        iconUrl,
+        width: 90,
+        height: 90,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            color: Colors.blueGrey.shade50,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Icon(
+            Icons.cloud,
+            size: 40,
+            color: Colors.blueGrey.shade400,
+          ),
+        ),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            width: 90,
+            height: 90,
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
